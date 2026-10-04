@@ -1,40 +1,29 @@
 @import "tailwindcss";
 
+/*
+ * Desderia — design language: banknote security printing.
+ * Black and the logo's gold; guilloche line-work, microprinted rules and an
+ * engraved small-cap serif. Condensed display type matches the DESDERIA
+ * wordmark. Square corners throughout, like a printed note.
+ */
 @theme {
-  /* Brand — black, gold, white (matches Desderia's billboard identity) */
-  --color-ink: #0a0a0a;
-  --color-ink-soft: #1c1a12;
+  --color-ink: #0c0b08;
+  --color-ink-soft: #17150f;
+  --color-ink-line: #2a271d;
   --color-gold: #c9b54a;
-  --color-gold-dark: #9c8a2e;
-  --color-gold-soft: #f6f1d9;
+  --color-gold-bright: #e9d675;
+  --color-gold-dark: #8a7a26;
+  --color-gold-soft: #f4efd6;
 
-  /* Surfaces */
   --color-background: #ffffff;
-  --color-surface: #f8f6ef;
-  --color-surface-alt: #f1eddc;
+  --color-surface: #f6f4ec;
 
-  /* Text */
   --color-foreground: #14130d;
   --color-muted: #6b6558;
 
-  /* Fonts (wired via next/font in layout.tsx) */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-oswald), var(--font-inter), ui-sans-serif, sans-serif;
-
-  --radius-card: 1rem;
-
-  --animate-fade-up: fade-up 0.7s ease-out both;
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-anybody), ui-sans-serif, sans-serif;
+  --font-engraved: var(--font-cormorant), Georgia, serif;
 }
 
 html {
@@ -50,138 +39,157 @@ body {
 
 ::selection {
   background: var(--color-gold);
-  color: #0a0a0a;
+  color: var(--color-ink);
 }
 
-/* ---------------------------------------------------------------- */
-/* Photo hero scrim — real photography, not a gradient mesh          */
-/* ---------------------------------------------------------------- */
-.hero-scrim {
-  background-image:
-    linear-gradient(100deg, rgba(10, 10, 10, 0.94) 0%, rgba(10, 10, 10, 0.8) 42%, rgba(10, 10, 10, 0.4) 78%, rgba(10, 10, 10, 0.18) 100%),
-    linear-gradient(0deg, rgba(10, 10, 10, 0.55) 0%, transparent 35%);
-}
-
-.text-gradient {
-  background-image: linear-gradient(100deg, var(--color-gold-dark), var(--color-gold));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Whisper-level shadows only — no colored glow */
-.card-shadow {
-  box-shadow: 0 4px 24px rgba(10, 10, 10, 0.05);
-}
-
-.card-shadow-lg {
-  box-shadow: 0 12px 40px rgba(10, 10, 10, 0.08);
+:focus-visible {
+  outline: 1px solid var(--color-gold);
+  outline-offset: 3px;
 }
 
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
+/* Condensed, heavy, upper-case — the DESDERIA wordmark's voice. */
+.font-display {
+  font-variation-settings: "wdth" 58;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+}
+.font-display-num {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 70;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Engraved small caps — the "BUREAU DE CHANGE" line under the logo. */
+.engraved {
+  font-family: var(--font-engraved);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-engraved);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--color-gold-dark);
+}
+.eyebrow::before,
+.eyebrow::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  transform: rotate(45deg);
+  background: currentColor;
+}
+.eyebrow-light {
+  color: var(--color-gold);
+}
+
 /* ---------------------------------------------------------------- */
-/* Buttons — 12px radius max, never pill                             */
+/* Buttons — square, letterspaced caps                               */
 /* ---------------------------------------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 12px;
-  padding: 13px 24px;
-  font-size: 0.9375rem;
-  font-weight: 600;
+  border-radius: 0;
+  border: 1px solid transparent;
+  padding: 14px 24px;
+  font-size: 0.8125rem;
+  font-weight: 700;
   line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   white-space: nowrap;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
-.btn:active {
-  transform: scale(0.98);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 .btn-primary {
   background: var(--color-gold);
+  border-color: var(--color-gold);
   color: var(--color-ink);
 }
 .btn-primary:hover {
-  background: var(--color-gold-dark);
-  color: #ffffff;
-}
-.btn-outline {
-  background: #ffffff;
-  color: var(--color-ink);
-  border: 1px solid rgba(10, 10, 10, 0.15);
-}
-.btn-outline:hover {
-  border-color: var(--color-gold-dark);
-  color: var(--color-gold-dark);
+  background: var(--color-gold-bright);
+  border-color: var(--color-gold-bright);
 }
 .btn-dark {
   background: var(--color-ink);
-  color: #ffffff;
+  border-color: var(--color-ink);
+  color: var(--color-gold-bright);
 }
 .btn-dark:hover {
   background: var(--color-ink-soft);
 }
-.btn-white {
-  background: #ffffff;
-  color: var(--color-ink);
-  box-shadow: 0 4px 24px rgba(10, 10, 10, 0.08);
+.btn-outline {
+  background: transparent;
+  border-color: rgba(20, 19, 13, 0.3);
+  color: var(--color-foreground);
 }
-.btn-white:hover {
-  background: var(--color-surface);
+.btn-outline:hover {
+  border-color: var(--color-foreground);
 }
 .btn-ghost-light {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  border-color: rgba(201, 181, 74, 0.55);
+  color: var(--color-gold-bright);
 }
 .btn-ghost-light:hover {
-  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--color-gold-bright);
 }
 
 /* ---------------------------------------------------------------- */
-/* Cards                                                              */
+/* Security-print devices                                            */
 /* ---------------------------------------------------------------- */
-.card {
-  border-radius: 16px;
-  border: 1px solid rgba(10, 10, 10, 0.07);
-  background: #ffffff;
-  box-shadow: 0 4px 24px rgba(10, 10, 10, 0.04);
-}
 
-/* ---------------------------------------------------------------- */
-/* Eyebrow label — quiet kicker, not a pill badge                    */
-/* ---------------------------------------------------------------- */
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
+/* Microprinted rule: a line of tiny repeated text instead of a hairline. */
+.microtext {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: 6.5px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
   color: var(--color-gold-dark);
+  user-select: none;
 }
-.eyebrow::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  flex-shrink: 0;
+
+.guilloche path {
+  fill: none;
+  stroke: currentColor;
 }
-.eyebrow-light {
-  color: #ffffff;
+.guilloche-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: guilloche-draw 2.4s cubic-bezier(0.45, 0, 0.2, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 90ms);
 }
-.eyebrow-light::before {
-  background: var(--color-gold);
+@keyframes guilloche-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .guilloche-draw path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }
 
 /* ---------------------------------------------------------------- */
-/* Live rates ticker — fixed strip under the navbar                  */
+/* Live rates ticker — black and gold under the navbar               */
 /* ---------------------------------------------------------------- */
 .ticker-bar {
   position: fixed;
@@ -192,7 +200,9 @@ body {
   align-items: stretch;
   height: 40px;
   background: var(--color-ink);
-  color: var(--color-gold);
+  border-top: 1px solid var(--color-ink-line);
+  border-bottom: 1px solid var(--color-gold-dark);
+  color: var(--color-gold-soft);
   overflow: hidden;
 }
 .ticker-label {
@@ -200,13 +210,13 @@ body {
   align-items: center;
   flex-shrink: 0;
   padding: 0 16px;
+  background: var(--color-gold);
+  color: var(--color-ink);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   white-space: nowrap;
-  color: #ffffff;
-  border-right: 1px solid rgba(201, 181, 74, 0.3);
 }
 .ticker-viewport {
   flex: 1;
@@ -218,7 +228,7 @@ body {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  animation: ticker-scroll 34s linear infinite;
+  animation: ticker-scroll 40s linear infinite;
   will-change: transform;
 }
 .ticker-bar:hover .ticker-track {
@@ -227,17 +237,17 @@ body {
 .ticker-item {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 18px;
+  gap: 10px;
+  padding: 0 20px;
   font-size: 12.5px;
   font-variant-numeric: tabular-nums;
-  color: #ffffff;
 }
 .ticker-divider {
-  width: 1px;
-  height: 14px;
-  margin-left: 18px;
-  background: rgba(201, 181, 74, 0.3);
+  width: 5px;
+  height: 5px;
+  margin-left: 20px;
+  transform: rotate(45deg);
+  background: var(--color-gold-dark);
 }
 @keyframes ticker-scroll {
   from {
@@ -256,14 +266,17 @@ body {
   }
 }
 
-/* Small status badges (e.g. "updated 3h ago") — rect, not pill */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 8px;
-  padding: 5px 10px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background: var(--color-surface);
-  color: var(--color-muted);
+.field {
+  width: 100%;
+  border-radius: 0;
+  border: 1px solid rgba(20, 19, 13, 0.18);
+  background: #ffffff;
+  padding: 12px 14px;
+  font-size: 0.9375rem;
+  color: var(--color-foreground);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.field:focus {
+  border-color: var(--color-gold-dark);
 }

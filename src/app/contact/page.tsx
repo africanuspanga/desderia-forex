@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageHeader from "@/components/PageHeader";
 import { ADDRESS, PHONE_DISPLAY, PHONE_TEL, WHATSAPP_NUMBER } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -10,54 +11,55 @@ export default function ContactPage() {
   const mapQuery = encodeURIComponent("Sky City Mall, Dar es Salaam, Tanzania");
 
   return (
-    <div className="pb-20 pt-38 lg:pb-28 lg:pt-42">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <p className="eyebrow">Contact</p>
-        <h1 className="font-display mt-4 text-4xl font-bold uppercase tracking-tight text-foreground sm:text-5xl">
-          Visit or Reach Us
-        </h1>
-
-        <div className="mt-10 grid gap-8 lg:grid-cols-2">
-          <div className="space-y-6">
-            <div className="card p-6">
-              <h2 className="font-display text-lg font-bold uppercase text-foreground">Location</h2>
-              <p className="mt-2 text-muted">{ADDRESS}</p>
+    <>
+      <PageHeader kicker="Contact" title="Find the Desderia counter" />
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:gap-16 lg:px-8 lg:py-24">
+        <div className="lg:col-span-5">
+          <dl className="border-t-[3px] border-double border-gold-dark">
+            <div className="border-b border-black/10 py-5">
+              <dt className="engraved text-sm text-gold-dark">Address</dt>
+              <dd className="mt-1 text-xl text-foreground">{ADDRESS}</dd>
             </div>
-
-            <div className="card p-6">
-              <h2 className="font-display text-lg font-bold uppercase text-foreground">Call or WhatsApp</h2>
-              <a href={`tel:${PHONE_TEL}`} className="mt-2 block text-xl font-semibold text-gold-dark">
-                {PHONE_DISPLAY}
-              </a>
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-95"
-              >
-                <svg viewBox="0 0 32 32" fill="currentColor" className="h-4 w-4">
-                  <path d="M16.004 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.6 4.44 1.73 6.37L3.2 28.8l6.6-1.7a12.75 12.75 0 0 0 6.2 1.58h.005c7.07 0 12.8-5.73 12.8-12.8s-5.73-12.68-12.8-12.68Z" />
-                </svg>
-                Chat on WhatsApp
-              </a>
+            <div className="border-b border-black/10 py-5">
+              <dt className="engraved text-sm text-gold-dark">Phone</dt>
+              <dd className="mt-1">
+                <a href={`tel:${PHONE_TEL}`} className="tabular text-xl font-semibold text-foreground hover:text-gold-dark">
+                  {PHONE_DISPLAY}
+                </a>
+              </dd>
             </div>
+            <div className="border-b border-black/10 py-5">
+              <dt className="engraved text-sm text-gold-dark">WhatsApp</dt>
+              <dd className="mt-1">
+                <a
+                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xl font-semibold text-foreground hover:text-gold-dark"
+                >
+                  Send us a message
+                </a>
+              </dd>
+            </div>
+            <div className="py-5">
+              <dt className="engraved text-sm text-gold-dark">Opening hours</dt>
+              <dd className="mt-1 text-muted">
+                Please call ahead to confirm. Hours may change on public holidays.
+              </dd>
+            </div>
+          </dl>
+        </div>
 
-            <p className="text-xs leading-relaxed text-muted">
-              Opening hours: please call ahead to confirm. Hours may vary on public holidays.
-            </p>
-          </div>
-
-          <div className="card overflow-hidden">
-            <iframe
-              title="Desderia Bureau de Change location"
-              src={`https://maps.google.com/maps?q=${mapQuery}&output=embed`}
-              className="h-full min-h-[360px] w-full"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
+        <div className="border border-gold/50 p-1.5 lg:col-span-7">
+          <iframe
+            title="Map showing Desderia Bureau de Change at Sky City Mall"
+            src={`https://maps.google.com/maps?q=${mapQuery}&output=embed`}
+            className="h-full min-h-[380px] w-full sepia-[.35]"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
-    </div>
+    </>
   );
 }

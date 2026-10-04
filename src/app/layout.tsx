@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Oswald } from "next/font/google";
+import { Anybody, Cormorant_SC, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,15 +9,22 @@ import RatesTicker from "@/components/RatesTicker";
 import { WHATSAPP_NUMBER } from "@/lib/format";
 import { getRates } from "@/lib/rates";
 
-const inter = Inter({
-  variable: "--font-inter",
+const schibsted = Schibsted_Grotesk({
+  variable: "--font-schibsted",
   subsets: ["latin"],
 });
 
-const oswald = Oswald({
-  variable: "--font-oswald",
+// Variable width axis lets the display face run condensed like the wordmark.
+const anybody = Anybody({
+  variable: "--font-anybody",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  axes: ["wdth"],
+});
+
+const cormorant = Cormorant_SC({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -46,7 +53,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { rates } = await getRates();
 
   return (
-    <html lang="en" className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
+    <html lang="en" className={`${schibsted.variable} ${anybody.variable} ${cormorant.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <script
           type="application/ld+json"

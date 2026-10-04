@@ -1,55 +1,48 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import MicroText from "@/components/MicroText";
 import { ADDRESS, PHONE_DISPLAY, PHONE_TEL } from "@/lib/format";
 
 const LINKS = [
-  { href: "/rates", label: "Exchange Rates" },
-  { href: "/about", label: "About Us" },
+  { href: "/rates", label: "Exchange rates" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-black/8 bg-surface text-foreground">
-      <div className="mx-auto max-w-7xl px-4 pb-28 pt-14 sm:px-6 lg:px-8 lg:pb-14">
-        <div className="grid gap-10 md:grid-cols-3">
-          <div>
-            <Logo />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-              Your trusted currency exchange partner in Dar es Salaam.
-            </p>
+    <footer className="border-t border-gold-dark bg-ink text-white">
+      <div className="mx-auto max-w-7xl px-4 pb-28 pt-16 sm:px-6 lg:px-8 lg:pb-14">
+        <div className="grid gap-12 md:grid-cols-12">
+          <div className="md:col-span-6">
+            <Logo className="h-14 sm:h-16" />
+            <p className="engraved mt-5 text-sm text-gold">Your trusted currency exchange partner</p>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gold-dark">Explore</h3>
-            <ul className="mt-4 flex flex-col gap-2">
+          <nav aria-label="Footer" className="md:col-span-2">
+            <ul className="flex flex-col gap-3">
               {LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-muted transition-colors hover:text-foreground">
+                  <Link href={link.href} className="text-sm text-white/65 hover:text-gold-bright">
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gold-dark">Visit Us</h3>
-            <p className="mt-4 text-sm text-muted">{ADDRESS}</p>
-            <a href={`tel:${PHONE_TEL}`} className="mt-3 inline-block text-lg font-semibold text-foreground transition-colors hover:text-gold-dark">
+          <div className="md:col-span-4">
+            <p className="text-sm text-white/65">{ADDRESS}</p>
+            <a href={`tel:${PHONE_TEL}`} className="tabular mt-3 inline-block text-lg font-semibold hover:text-gold-bright">
               {PHONE_DISPLAY}
             </a>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-black/8 pt-6">
-          <p className="text-xs leading-relaxed text-muted">
-            Exchange rates displayed online are indicative and subject to change. Final
-            transaction rates are confirmed at our Sky City Mall branch.
-          </p>
-          <p className="mt-3 text-xs text-muted">
-            © {new Date().getFullYear()} Desderia Bureau de Change. All rights reserved.
-          </p>
+        <MicroText className="mt-14" />
+        <div className="mt-4 flex flex-col gap-3 text-xs leading-relaxed text-white/45 sm:flex-row sm:justify-between">
+          <p>Rates shown online are indicative. The final rate is confirmed at our Sky City Mall counter.</p>
+          <p>© {new Date().getFullYear()} Desderia Bureau de Change</p>
         </div>
       </div>
     </footer>

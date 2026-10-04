@@ -1,41 +1,31 @@
-import Link from "next/link";
+import ExchangeCalculator from "@/components/ExchangeCalculator";
+import RatesLedger from "@/components/RatesLedger";
 import type { RatesResult } from "@/lib/rates";
-import RateCard from "./RateCard";
 
 export default function RatesSection({ rates, transactionDate, source }: RatesResult) {
   return (
-    <section className="bg-surface py-20 lg:py-28">
+    <section className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl">
-          <p className="eyebrow">Today&apos;s Rates</p>
-          <h2 className="font-display mt-4 text-4xl font-bold uppercase tracking-tight text-foreground sm:text-5xl">
-            Foreign Exchange Rates
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-muted">
-            Check the latest Desderia buying and selling rates before visiting our branch.
-          </p>
-        </div>
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-7">
+            <p className="eyebrow">Today&apos;s rates</p>
+            <h2 className="font-display mt-5 text-5xl leading-[0.92] text-foreground sm:text-6xl">
+              Buy &amp; sell, side by side
+            </h2>
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted">
+              &ldquo;We buy&rdquo; is what we pay for your foreign currency. &ldquo;We
+              sell&rdquo; is what you pay for ours.
+            </p>
+            <div className="mt-10">
+              <RatesLedger rates={rates} transactionDate={transactionDate} source={source} />
+            </div>
+          </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {rates.map((rate) => (
-            <RateCard key={rate.currency.code} rate={rate} />
-          ))}
-        </div>
-
-        <div className="mt-12 flex flex-col items-center gap-4 text-center">
-          <Link href="/rates" className="btn btn-dark">
-            See All Exchange Rates
-          </Link>
-          <p className="max-w-xl text-xs leading-relaxed text-muted">
-            Rates are indicative and sourced from Bank of Tanzania reference rates. Please
-            contact or visit our branch to confirm the final transaction rate.
-          </p>
-          {source === "bot" && transactionDate && (
-            <span className="badge">BoT reference date: {transactionDate}</span>
-          )}
-          {source === "fallback" && (
-            <span className="badge">Showing recent indicative rates. Live BoT feed temporarily unavailable.</span>
-          )}
+          <div className="lg:col-span-5 lg:pt-36">
+            <div className="lg:sticky lg:top-36">
+              <ExchangeCalculator rates={rates} />
+            </div>
+          </div>
         </div>
       </div>
     </section>

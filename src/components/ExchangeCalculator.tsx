@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import type { CurrencyRate } from "@/lib/rates";
 
 interface ExchangeCalculatorProps {
@@ -9,15 +8,12 @@ interface ExchangeCalculatorProps {
 }
 
 function formatAmount(value: number): string {
-  const decimals = value < 10 ? 2 : 0;
+  const decimals = value < 100 ? 2 : 0;
   return new Intl.NumberFormat("en-TZ", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(value);
 }
-
-const inputClasses =
-  "w-full rounded-xl border border-black/10 bg-surface px-4 py-3 text-sm text-foreground outline-none transition focus:border-gold/50 focus:bg-white focus:ring-2 focus:ring-gold/15";
 
 export default function ExchangeCalculator({ rates }: ExchangeCalculatorProps) {
   const rateMap = useMemo(() => new Map(rates.map((r) => [r.currency.code, r])), [rates]);
@@ -26,17 +22,17 @@ export default function ExchangeCalculator({ rates }: ExchangeCalculatorProps) {
     rates.some((r) => r.currency.code === "USD") ? "USD" : rates[0]?.currency.code ?? "TZS"
   );
   const [wantCode, setWantCode] = useState<string>("TZS");
-  const [amountInput, setAmountInput] = useState<string>("");
+  const [amountInput, setAmountInput] = useState<string>("100");
 
   const amount = parseFloat(amountInput.replace(/,/g, ""));
   const hasAmount = amountInput.trim() !== "" && Number.isFinite(amount) && amount > 0;
 
+  // The bureau buys your foreign currency at its buying rate, sells at its selling rate.
   const toTzs = (code: string, value: number): number => {
     if (code === "TZS") return value;
     const rate = rateMap.get(code);
     return rate ? value * rate.buyingRate : NaN;
   };
-
   const fromTzs = (code: string, tzs: number): number => {
     if (code === "TZS") return tzs;
     const rate = rateMap.get(code);
@@ -49,11 +45,11 @@ export default function ExchangeCalculator({ rates }: ExchangeCalculatorProps) {
     if (haveCode === wantCode) return null;
     if (haveCode === "TZS") {
       const rate = rateMap.get(wantCode);
-      return rate ? `1 ${wantCode} = TZS ${formatAmount(rate.sellingRate)}` : null;
+      return rate ? `1 ${wantCode} = ${formatAmount(rate.sellingRate)} TZS` : null;
     }
     if (wantCode === "TZS") {
       const rate = rateMap.get(haveCode);
-      return rate ? `1 ${haveCode} = TZS ${formatAmount(rate.buyingRate)}` : null;
+      return rate ? `1 ${haveCode} = ${formatAmount(rate.buyingRate)} TZS` : null;
     }
     const from = rateMap.get(haveCode);
     const to = rateMap.get(wantCode);
@@ -61,99 +57,65 @@ export default function ExchangeCalculator({ rates }: ExchangeCalculatorProps) {
     return `1 ${haveCode} = ${formatAmount(from.buyingRate / to.sellingRate)} ${wantCode}`;
   })();
 
-  const renderOptions = () => (
+  const options = (
     <>
-      <option value="TZS">🇹🇿 TZS - Tanzanian Shilling</option>
+      <option value="TZS">TZS — Tanzanian Shilling</option>
       {rates.map((r) => (
         <option key={r.currency.code} value={r.currency.code}>
-          {r.currency.flag} {r.currency.code} - {r.currency.name}
+          {r.currency.code} — {r.currency.name}
         </option>
       ))}
     </>
   );
 
   return (
-    <div className="card p-6 sm:p-8">
-      <h2 className="font-display text-xl font-bold uppercase tracking-tight text-foreground">Check Your Exchange</h2>
-      <p className="mt-1 text-sm text-muted">Live indicative conversion, confirmed at the branch.</p>
+    <div className="border border-gold/50 bg-white p-1.5">
+      <div className="border border-gold/25 p-5 sm:p-7">
+        <p className="engraved text-sm text-gold-dark">Exchange estimate</p>
 
-      <div className="mt-6 space-y-5">
-        <div>
-          <label htmlFor="calc-have-currency" className="text-xs font-semibold uppercase tracking-[0.15em] text-muted">
-            I have
-          </label>
-          <div className="mt-2 grid grid-cols-[1fr_auto] gap-3">
-            <div className="relative">
-              <select
-                id="calc-have-currency"
-                value={haveCode}
-                onChange={(e) => setHaveCode(e.target.value)}
-                className={`${inputClasses} appearance-none pr-9 font-medium`}
-              >
-                {renderOptions()}
+        <div className="mt-5 space-y-4">
+          <div>
+            <label htmlFor="calc-have" className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
+              You bring
+            </label>
+            <div className="mt-2 grid grid-cols-[1fr_8rem] gap-2">
+              <select id="calc-have" value={haveCode} onChange={(e) => setHaveCode(e.target.value)} className="field font-medium">
+                {options}
               </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-              </svg>
+              <input
+                type="number"
+                inputMode="decimal"
+                min="0"
+                value={amountInput}
+                onChange={(e) => setAmountInput(e.target.value)}
+                aria-label={`Amount in ${haveCode}`}
+                className="field tabular text-right"
+              />
             </div>
-            <input
-              type="number"
-              inputMode="decimal"
-              min="0"
-              value={amountInput}
-              onChange={(e) => setAmountInput(e.target.value)}
-              placeholder="Amount"
-              aria-label="Amount you have"
-              className={`${inputClasses} tabular w-28 sm:w-36`}
-            />
+          </div>
+
+          <div>
+            <label htmlFor="calc-want" className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
+              You receive
+            </label>
+            <select id="calc-want" value={wantCode} onChange={(e) => setWantCode(e.target.value)} className="field mt-2 font-medium">
+              {options}
+            </select>
           </div>
         </div>
 
-        <div>
-          <label htmlFor="calc-want-currency" className="text-xs font-semibold uppercase tracking-[0.15em] text-muted">
-            I want
-          </label>
-          <div className="mt-2 grid grid-cols-[1fr_auto] gap-3">
-            <div className="relative">
-              <select
-                id="calc-want-currency"
-                value={wantCode}
-                onChange={(e) => setWantCode(e.target.value)}
-                className={`${inputClasses} appearance-none pr-9 font-medium`}
-              >
-                {renderOptions()}
-              </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-              </svg>
-            </div>
-            <div
-              aria-live="polite"
-              className="tabular flex w-28 items-center rounded-xl border border-black/10 bg-gold-soft px-4 py-3 text-sm font-semibold text-foreground sm:w-36"
-            >
-              {result !== null && Number.isFinite(result) ? formatAmount(result) : "-"}
-            </div>
-          </div>
+        <div className="mt-6 border-t-[3px] border-double border-gold/60 pt-4">
+          <output aria-live="polite" className="flex items-baseline justify-between gap-3">
+            <span className="font-display text-xl text-muted">{wantCode}</span>
+            <span className="font-display-num truncate text-4xl text-foreground sm:text-5xl">
+              {result !== null && Number.isFinite(result) ? formatAmount(result) : "—"}
+            </span>
+          </output>
+          <p className="tabular mt-2 text-right text-sm text-muted">{indicativeRate ?? "Choose two different currencies"}</p>
         </div>
 
-        {indicativeRate && (
-          <p className="text-sm text-muted">
-            Indicative rate: <span className="tabular font-semibold text-foreground">{indicativeRate}</span>
-          </p>
-        )}
-
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Link href="/rates" className="btn btn-dark flex-1">
-            View All Rates
-          </Link>
-          <Link href="/contact" className="btn btn-outline flex-1">
-            Visit Us
-          </Link>
-        </div>
-
-        <p className="text-xs leading-relaxed text-muted">
-          Rates shown online are indicative and may change with market conditions. Final
-          rates are confirmed at our branch at the time of transaction.
+        <p className="mt-5 text-xs leading-relaxed text-muted">
+          An estimate from today&apos;s indicative rates. The counter confirms the final amount.
         </p>
       </div>
     </div>
