@@ -16,7 +16,11 @@ export default function Hero({ rates, transactionDate }: RatesResult) {
 
       <div className="relative mx-auto grid max-w-7xl gap-14 px-4 pb-20 pt-14 sm:px-6 lg:grid-cols-12 lg:items-center lg:gap-10 lg:px-8 lg:pb-28 lg:pt-20">
         <div className="lg:col-span-6">
-          <p className="eyebrow eyebrow-light">Bureau de Change · Sky City Mall</p>
+          <p className="eyebrow eyebrow-light">
+            <span>
+              <span className="hidden sm:inline">Bureau de Change · </span>Sky City Mall
+            </span>
+          </p>
           <h1 className="font-display mt-6 text-[3.6rem] leading-[0.9] sm:text-[5.5rem] lg:text-[6.5rem]">
             Know the rate
             <br />

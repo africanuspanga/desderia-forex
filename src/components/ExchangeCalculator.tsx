@@ -78,7 +78,7 @@ export default function ExchangeCalculator({ rates }: ExchangeCalculatorProps) {
             <label htmlFor="calc-have" className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
               You bring
             </label>
-            <div className="mt-2 grid grid-cols-[1fr_8rem] gap-2">
+            <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_8rem]">
               <select id="calc-have" value={haveCode} onChange={(e) => setHaveCode(e.target.value)} className="field font-medium">
                 {options}
               </select>

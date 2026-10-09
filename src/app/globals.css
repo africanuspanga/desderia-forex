@@ -154,6 +154,10 @@ body {
 /* Microprinted rule: a line of tiny repeated text instead of a hairline. */
 .microtext {
   display: block;
+  /* The repeated text is ~3400px of nowrap. Without inline-size containment its
+     min-content width props open every grid column it sits in, which widens the
+     whole page on phones. */
+  contain: inline-size;
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-sans);
@@ -272,7 +276,8 @@ body {
   border: 1px solid rgba(20, 19, 13, 0.18);
   background: #ffffff;
   padding: 12px 14px;
-  font-size: 0.9375rem;
+  /* 16px minimum stops iOS Safari zooming in when a field is focused. */
+  font-size: 1rem;
   color: var(--color-foreground);
   outline: none;
   transition: border-color 0.15s ease;
